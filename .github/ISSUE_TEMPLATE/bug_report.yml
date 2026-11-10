@@ -1,0 +1,49 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. **Security issues: do not file here**, follow SECURITY.md instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. Say where (the tenant app, the public pages or the operator console), which role you were (tenant admin, a team role, operator), and for sending problems whether SES was live (aws) or simulated, and the sending domain's status.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. make up && make demo
+        2. Sign in at http://localhost:3650 as maya@northwind.example
+        3. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: env
+    attributes:
+      label: Environment
+      options: ["Local (make up on Floci)", "Local against AWS (make up-aws)", "AWS (Terraform)", "Self-hosted (other)", "Other"]
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: ["Sending domains and DNS verification", "Sender identities", "Contacts, custom fields and tags", "Lists and segments", "Subscribe forms and double opt-in", "CSV import and export", "Templates and rendering", "Campaigns, scheduling and sending", "Open and click tracking", "Unsubscribe and suppressions", "Bounces, complaints and SES events", "Reputation and quotas", "Dashboard and campaign reports", "Operator console (tenants, plans, fleet, DLQ)", "Account, team and sign-in", "Deployment and infrastructure", "Other"]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Redact keys, tokens and hostnames before pasting.
+      render: text

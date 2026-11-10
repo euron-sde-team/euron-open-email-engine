@@ -1,0 +1,245 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm-neutral canvas, white cards, crisp 1px hairlines. */
+    --background: 40 22% 97%;
+    --foreground: 30 12% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 30 12% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 12% 10%;
+
+    --secondary: 38 16% 93%;
+    --secondary-foreground: 30 12% 10%;
+
+    --muted: 38 16% 93%;
+    --muted-foreground: 30 6% 40%;
+
+    --accent: 38 16% 93%;
+    --accent-foreground: 30 12% 10%;
+
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 36 14% 85%;
+    --input: 33 9% 60%;
+
+    --radius: 6px;
+
+    /* Accent: rose, hue 334. hsl(334 76% 38%) = #ab1757, 7.0:1 on white and
+       6.6:1 on the canvas (checked with the WCAG relative-luminance formula).
+       The auth store rewrites this at runtime from tenant.brand_color. */
+    --brand: 171 23 87;
+    --brand-foreground: 255 255 255;
+
+    /* Semantic status colours (RGB triplets, light mode = ~700 weight). */
+    --success: 4 120 87;
+    --warning: 161 98 7;
+    --info: 29 78 216;
+    --danger: 197 28 28;
+    --neutral: 107 98 90;
+
+    /* Flat surfaces: no small elevation. Floating overlays keep a faint lift. */
+    --shadow-sm: 0 0 #0000;
+    --shadow: 0 0 #0000;
+    --shadow-md: 0 4px 12px -4px rgb(30 20 10 / 0.08);
+    --shadow-lg: 0 12px 32px -12px rgb(30 20 10 / 0.14);
+  }
+
+  .dark {
+    --background: 25 9% 7%;
+    --foreground: 36 14% 92%;
+
+    --card: 25 9% 10%;
+    --card-foreground: 36 14% 92%;
+
+    --popover: 25 9% 10%;
+    --popover-foreground: 36 14% 92%;
+
+    --secondary: 25 8% 15%;
+    --secondary-foreground: 36 14% 92%;
+
+    --muted: 25 8% 14%;
+    --muted-foreground: 30 8% 64%;
+
+    --accent: 25 8% 16%;
+    --accent-foreground: 36 14% 92%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 28 8% 20%;
+    --input: 28 8% 26%;
+
+    /* Dark accent: hsl(334 80% 70%) = #f075aa, 7.0:1 on the page and 6.5:1 on
+       cards. Dark ink (the page colour) reads on it at 7.0:1. */
+    --brand: 240 117 170;
+    --brand-foreground: 19 17 16;
+
+    --success: 52 211 153;
+    --warning: 251 191 36;
+    --info: 147 197 253;
+    --danger: 248 113 113;
+    --neutral: 168 160 152;
+
+    --shadow-sm: 0 0 #0000;
+    --shadow: 0 0 #0000;
+    --shadow-md: 0 4px 16px -4px rgb(0 0 0 / 0.5);
+    --shadow-lg: 0 12px 36px -12px rgb(0 0 0 / 0.6);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-[15px];
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv01", "cv03", "ss01";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background-color: rgb(var(--brand) / 0.18);
+  }
+}
+
+@layer utilities {
+  /* One staggered fade-up reveal on page load. Apply .reveal per section and
+     stagger with inline animation-delay (e.g. style={{ animationDelay: "60ms" }}). */
+  .reveal {
+    animation: fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Minimal, opacity-only modal transition. Avoids the zoom + translate
+     conflict that made dialogs appear to fly in from a corner. */
+  .dialog-overlay[data-state="open"],
+  .dialog-content[data-state="open"] {
+    animation: dialog-fade-in 0.16s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .dialog-overlay[data-state="closed"],
+  .dialog-content[data-state="closed"] {
+    animation: dialog-fade-out 0.12s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  @keyframes dialog-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dialog-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* Result-dialog feedback: the ring pops in, then each stroke draws itself
+     along its own length (pathLength normalized to 1). Shared by the success
+     tick and the error cross. */
+  .result-pop {
+    animation: result-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .result-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: result-draw 0.42s cubic-bezier(0.65, 0, 0.35, 1) 0.18s forwards;
+  }
+
+  /* Second stroke of the error cross, drawn just after the first. */
+  .result-draw-late {
+    animation-delay: 0.36s;
+  }
+
+  @keyframes result-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    60% {
+      transform: scale(1.06);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes result-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .dialog-overlay,
+    .dialog-content,
+    .result-pop {
+      animation: none;
+    }
+    .result-draw {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+
+}
+
+/* Quiet scrollbars. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground) / 0.4);
+}

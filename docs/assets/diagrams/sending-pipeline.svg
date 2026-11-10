@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="t d">
+  <title id="t">One campaign, from Send to the report</title>
+  <desc id="d">A campaign is checked, its audience is snapshotted, recipients are queued in rate-limited batches, each message is rendered with tracked links and an open pixel, and sent through SES with the tenant's configuration set. SES events and tracking hits flow back into the same message rows and the report. The reputation gate can pause a sending campaign.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#6B6560"/></marker>
+    <marker id="v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#AB1757"/></marker>
+    <style>
+      .bg{fill:#FFFFFF} .box{fill:#FAF8F6;stroke:#CFC8C2;stroke-width:1.2} .hot{fill:#FBF1F5;stroke:#E2A9BF;stroke-width:1.2}
+      .h{font:600 15px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#1C1917} .t{font:13px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#3A3531} .n{font:12px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#6B6560} .l{font:12px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#6B6560}
+      .ln{stroke:#6B6560;stroke-width:1.4;fill:none} .lv{stroke:#AB1757;stroke-width:2;fill:none}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="420" rx="18"/>
+  <text class="h" x="40" y="44" style="font-size:20px">One campaign, from Send to the report</text>
+  <text class="n" x="40" y="66">What happens between pressing Send and the first open.</text>
+  <rect class="box" x="40" y="100" width="200" height="92" rx="12"/>
+  <text class="h" x="56" y="128">1. Preflight</text>
+  <text class="t" x="56" y="150">verified domain, sender,</text>
+  <text class="t" x="56" y="168">quota, audience size</text>
+  <path class="ln" d="M240 146 H272" marker-end="url(#a)"/>
+  <rect class="box" x="272" y="100" width="200" height="92" rx="12"/>
+  <text class="h" x="288" y="128">2. Snapshot</text>
+  <text class="t" x="288" y="150">audience to recipients in one</text>
+  <text class="t" x="288" y="168">statement; skip suppressed</text>
+  <path class="ln" d="M472 146 H504" marker-end="url(#a)"/>
+  <rect class="box" x="504" y="100" width="200" height="92" rx="12"/>
+  <text class="h" x="520" y="128">3. Queue</text>
+  <text class="t" x="520" y="150">per-tenant rate-limited</text>
+  <text class="t" x="520" y="168">batches (BullMQ)</text>
+  <path class="ln" d="M704 146 H736" marker-end="url(#a)"/>
+  <rect class="box" x="736" y="100" width="200" height="92" rx="12"/>
+  <text class="h" x="752" y="128">4. Render</text>
+  <text class="t" x="752" y="150">merge tags, tracked links,</text>
+  <text class="t" x="752" y="168">pixel, unsubscribe headers</text>
+  <path class="ln" d="M936 146 H968" marker-end="url(#a)"/>
+  <rect class="hot" x="968" y="100" width="200" height="92" rx="12"/>
+  <text class="h" x="984" y="128">5. SES SendEmail</text>
+  <text class="t" x="984" y="150">tenant configuration set,</text>
+  <text class="t" x="984" y="168">tags: tenant, campaign</text>
+  <rect class="box" x="40" y="260" width="260" height="100" rx="12"/>
+  <text class="h" x="56" y="288">Reputation gate</text>
+  <text class="t" x="56" y="310">PAUSED freezes in-flight</text>
+  <text class="t" x="56" y="328">campaigns; THROTTLED lowers</text>
+  <text class="t" x="56" y="346">the send rate</text>
+  <rect class="box" x="340" y="260" width="260" height="92" rx="12"/>
+  <text class="h" x="356" y="288">Events back from SES</text>
+  <text class="t" x="356" y="310">SNS to SQS to the worker:</text>
+  <text class="t" x="356" y="328">delivery, bounce, complaint</text>
+  <rect class="box" x="640" y="260" width="260" height="92" rx="12"/>
+  <text class="h" x="656" y="288">Tracking hits</text>
+  <text class="t" x="656" y="310">/t/o pixel and /t/c redirect</text>
+  <text class="t" x="656" y="328">signed tokens, machine opens flagged</text>
+  <rect class="hot" x="940" y="260" width="220" height="92" rx="12"/>
+  <text class="h" x="956" y="288">Report</text>
+  <text class="t" x="956" y="310">funnel, timeline, links,</text>
+  <text class="t" x="956" y="328">bounces, domains</text>
+  <path class="ln" d="M600 306 H640" marker-end="url(#a)"/>
+  <path class="lv" d="M900 306 H940" marker-end="url(#v)"/>
+  <path class="ln" d="M340 306 H300" marker-end="url(#a)"/>
+  <text class="n" x="40" y="396">Sending is idempotent per (campaign, contact). Transactional-style mail (test sends, confirmations) uses the tenant's default sender and is never frozen.</text>
+
+</svg>

@@ -1,0 +1,631 @@
+// Type source for Kysely (prisma-kysely). The SQL in db/migrations is the schema of record;
+// this file only describes it so `pnpm --filter @open-email/api gen:types` can regenerate
+// src/db/types.ts and src/db/enums.ts. Partial and expression indexes live in the SQL only.
+generator kysely {
+  provider     = "prisma-kysely"
+  output       = "../src/db"
+  enumFileName = "enums.ts"
+  fileName     = "types.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum operator_role {
+  SUPERADMIN
+  OPERATOR
+}
+
+enum user_status {
+  ACTIVE
+  DISABLED
+  PENDING
+}
+
+enum tenant_status {
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+enum entitlement_source {
+  PLAN
+  ADMIN
+}
+
+enum storage_provider {
+  S3
+  LOCAL
+}
+
+enum email_domain_status {
+  PENDING
+  VERIFIED
+  FAILED
+  DISABLED
+}
+
+enum email_identity_status {
+  ACTIVE
+  ARCHIVED
+}
+
+enum email_category {
+  TRANSACTIONAL
+  NOTIFICATION
+  MARKETING
+}
+
+enum email_message_status {
+  QUEUED
+  SENT
+  DELIVERED
+  BOUNCED
+  COMPLAINED
+  REJECTED
+  FAILED
+  SUPPRESSED
+}
+
+enum email_suppression_reason {
+  HARD_BOUNCE
+  COMPLAINT
+  UNSUBSCRIBE
+  ADMIN_BLOCK
+  IMPORTED
+}
+
+enum email_sending_status {
+  ACTIVE
+  WARNING
+  THROTTLED
+  PAUSED
+}
+
+enum contact_status {
+  SUBSCRIBED
+  UNSUBSCRIBED
+  BOUNCED
+  COMPLAINED
+  PENDING_CONFIRMATION
+}
+
+enum contact_source {
+  MANUAL
+  IMPORT
+  FORM
+  API
+}
+
+enum list_member_status {
+  subscribed
+  pending
+  unsubscribed
+}
+
+enum custom_field_type {
+  text
+  number
+  date
+  boolean
+}
+
+enum campaign_status {
+  DRAFT
+  SCHEDULED
+  SENDING
+  PAUSED
+  SENT
+  CANCELLED
+  FAILED
+}
+
+enum recipient_status {
+  QUEUED
+  SENT
+  DELIVERED
+  BOUNCED
+  COMPLAINED
+  SKIPPED
+  FAILED
+}
+
+enum import_status {
+  UPLOADED
+  QUEUED
+  PROCESSING
+  DONE
+  FAILED
+}
+
+enum email_event_type {
+  SEND
+  DELIVERY
+  BOUNCE
+  COMPLAINT
+  REJECT
+  OPEN
+  CLICK
+  UNSUBSCRIBE
+}
+
+// ─── Operator plane ──────────────────────────────────────────────────────────
+
+model operator_users {
+  id            String        @id
+  email         String        @unique
+  name          String
+  password_hash String
+  role          operator_role @default(OPERATOR)
+  status        user_status   @default(ACTIVE)
+  last_login_at DateTime?
+  created_at    DateTime
+  updated_at    DateTime
+
+  @@index([status])
+}
+
+model plans {
+  id          String   @id
+  key         String   @unique
+  name        String
+  description String?
+  modules     Json
+  limits      Json
+  is_active   Boolean  @default(true)
+  sort_order  Int      @default(0)
+  created_at  DateTime
+  updated_at  DateTime
+}
+
+model operator_audit_logs {
+  id                String   @id
+  actor_operator_id String?
+  actor_email       String?
+  action            String
+  category          String
+  tenant_id         String?
+  resource_id       String?
+  summary           String
+  metadata          Json?
+  created_at        DateTime
+
+  @@index([created_at])
+  @@index([tenant_id, created_at])
+}
+
+// ─── Tenancy ─────────────────────────────────────────────────────────────────
+
+model tenants {
+  id                              String               @id
+  slug                            String               @unique
+  name                            String
+  plan_key                        String?
+  brand_color                     String               @default("#2563eb")
+  timezone                        String               @default("UTC")
+  company_address                 String?
+  status                          tenant_status        @default(ACTIVE)
+  config                          Json?
+  created_at                      DateTime
+  updated_at                      DateTime
+  email_sending_status            email_sending_status @default(ACTIVE)
+  email_sending_status_changed_at DateTime?
+
+  @@index([status])
+}
+
+model tenant_entitlements {
+  id          String             @id
+  tenant_id   String
+  code        String
+  enabled     Boolean            @default(true)
+  limit_value Int?
+  source      entitlement_source @default(PLAN)
+  created_at  DateTime
+  updated_at  DateTime
+
+  @@unique([tenant_id, code])
+  @@index([tenant_id])
+}
+
+model users {
+  id            String      @id
+  tenant_id     String
+  name          String
+  email         String
+  password_hash String
+  role          String
+  status        user_status @default(ACTIVE)
+  permissions   Json?
+  avatar_color  String?
+  last_login_at DateTime?
+  created_at    DateTime
+  updated_at    DateTime
+
+  @@unique([tenant_id, email])
+  @@index([email])
+}
+
+model roles {
+  id          String   @id
+  tenant_id   String
+  key         String
+  name        String
+  permissions Json
+  builtin     Boolean  @default(false)
+  created_at  DateTime
+  updated_at  DateTime
+
+  @@unique([tenant_id, key])
+}
+
+model audit_logs {
+  id          String   @id
+  tenant_id   String
+  user_id     String?
+  action      String
+  entity_type String?
+  entity_id   String?
+  meta        Json?
+  created_at  DateTime
+
+  @@index([tenant_id, created_at])
+}
+
+model notifications {
+  id         String   @id
+  tenant_id  String
+  user_id    String
+  text       String
+  link       String?
+  read       Boolean  @default(false)
+  created_at DateTime
+
+  @@index([tenant_id, user_id, created_at])
+}
+
+model files {
+  id           String           @id
+  tenant_id    String
+  key          String
+  bucket       String
+  name         String
+  content_type String?
+  size_bytes   Int?
+  entity_type  String?
+  entity_id    String?
+  uploaded_by  String?
+  storage      storage_provider @default(LOCAL)
+  created_at   DateTime
+
+  @@index([tenant_id, entity_type, entity_id])
+}
+
+// ─── Sending infrastructure ──────────────────────────────────────────────────
+
+model email_sending_domains {
+  id                  String              @id
+  tenant_id           String
+  subdomain           String
+  mail_from_subdomain String?
+  ses_configuration_set String?
+  status              email_domain_status @default(PENDING)
+  dkim_status         String?
+  mail_from_status    String?
+  dns_records         Json?
+  tracking_domain     String
+  tracking_status     String              @default("PENDING")
+  failure_reason      String?
+  verified_at         DateTime?
+  last_checked_at     DateTime?
+  created_at          DateTime
+  updated_at          DateTime
+
+  @@index([tenant_id])
+}
+
+model email_sender_identities {
+  id                       String                @id
+  tenant_id                String
+  sending_domain_id        String
+  email_address            String
+  display_name             String?
+  reply_to                 String?
+  status                   email_identity_status @default(ACTIVE)
+  is_default_transactional Boolean               @default(false)
+  is_default_notification  Boolean               @default(false)
+  is_default_marketing     Boolean               @default(false)
+  created_at               DateTime
+  updated_at               DateTime
+
+  @@unique([tenant_id, email_address])
+  @@index([tenant_id])
+}
+
+model email_messages {
+  id                 String               @id
+  tenant_id          String
+  category           email_category       @default(NOTIFICATION)
+  sending_domain_id  String?
+  sender_identity_id String?
+  campaign_id        String?
+  contact_id         String?
+  from_address       String
+  to_address         String
+  subject            String?
+  ses_message_id     String?
+  status             email_message_status @default(QUEUED)
+  simulated          Boolean              @default(false)
+  idempotency_key    String?
+  open_count         Int                  @default(0)
+  click_count        Int                  @default(0)
+  bounce_type        String?
+  bounce_reason      String?
+  sent_at            DateTime?
+  delivered_at       DateTime?
+  bounced_at         DateTime?
+  complained_at      DateTime?
+  opened_at          DateTime?
+  clicked_at         DateTime?
+  error              String?
+  created_at         DateTime
+  updated_at         DateTime
+
+  @@index([tenant_id, created_at])
+  @@index([campaign_id])
+  @@index([ses_message_id])
+}
+
+model email_suppressions {
+  id             String                   @id
+  tenant_id      String
+  email          String
+  reason         email_suppression_reason
+  category_scope email_category?
+  note           String?
+  created_at     DateTime
+  updated_at     DateTime
+
+  @@index([tenant_id, email])
+}
+
+model email_reputation_events {
+  id             String               @id
+  tenant_id      String
+  from_status    email_sending_status
+  to_status      email_sending_status
+  trigger        String
+  reason         String?
+  rates_snapshot Json?
+  created_at     DateTime
+
+  @@index([tenant_id, created_at])
+}
+
+model email_domain_health_checks {
+  id                String   @id
+  tenant_id         String
+  sending_domain_id String
+  dkim_status       String?
+  mail_from_status  String?
+  spf_present       Boolean  @default(false)
+  dmarc_present     Boolean  @default(false)
+  failures          Json?
+  created_at        DateTime
+
+  @@index([sending_domain_id, created_at])
+}
+
+model email_events {
+  id          String           @id
+  tenant_id   String
+  message_id  String
+  campaign_id String?
+  contact_id  String?
+  type        email_event_type
+  occurred_at DateTime
+  detail      String?
+  url         String?
+  machine     Boolean          @default(false)
+  ip_hash     String?
+  ua_class    String?
+
+  @@index([tenant_id, type, occurred_at])
+  @@index([message_id, occurred_at])
+  @@index([campaign_id, type, occurred_at])
+}
+
+model tenant_usage_monthly {
+  tenant_id   String
+  month       DateTime @db.Date
+  emails_sent Int      @default(0)
+  updated_at  DateTime
+
+  @@id([tenant_id, month])
+}
+
+// ─── Audience ────────────────────────────────────────────────────────────────
+
+model contacts {
+  id              String         @id
+  tenant_id       String
+  email           String
+  first_name      String?
+  last_name       String?
+  status          contact_status @default(SUBSCRIBED)
+  source          contact_source @default(MANUAL)
+  tags            String[]
+  attributes      Json           @default("{}")
+  last_opened_at  DateTime?
+  last_clicked_at DateTime?
+  emails_received Int            @default(0)
+  consent_at      DateTime?
+  consent_ip_hash String?
+  unsubscribed_at DateTime?
+  created_at      DateTime
+  updated_at      DateTime
+
+  @@unique([tenant_id, email])
+  @@index([tenant_id, status])
+}
+
+model custom_fields {
+  id         String            @id
+  tenant_id  String
+  key        String
+  label      String
+  type       custom_field_type @default(text)
+  created_at DateTime
+
+  @@unique([tenant_id, key])
+}
+
+model lists {
+  id             String   @id
+  tenant_id      String
+  name           String
+  description    String   @default("")
+  double_opt_in  Boolean  @default(false)
+  created_at     DateTime
+  updated_at     DateTime
+
+  @@index([tenant_id])
+}
+
+model list_members {
+  tenant_id  String
+  list_id    String
+  contact_id String
+  status     list_member_status @default(subscribed)
+  created_at DateTime
+  updated_at DateTime
+
+  @@id([list_id, contact_id])
+  @@index([tenant_id, contact_id])
+}
+
+model segments {
+  id            String   @id
+  tenant_id     String
+  name          String
+  description   String   @default("")
+  rules         Json
+  contact_count Int?
+  created_at    DateTime
+  updated_at    DateTime
+
+  @@index([tenant_id])
+}
+
+model subscribe_forms {
+  id              String   @id
+  tenant_id       String
+  name            String
+  slug            String   @unique
+  list_id         String
+  headline        String
+  description     String   @default("")
+  button_label    String   @default("Subscribe")
+  success_message String   @default("Thanks for subscribing.")
+  collect_name    Boolean  @default(false)
+  submissions     Int      @default(0)
+  active          Boolean  @default(true)
+  created_at      DateTime
+  updated_at      DateTime
+
+  @@index([tenant_id])
+}
+
+model import_jobs {
+  id              String        @id
+  tenant_id       String
+  file_name       String
+  file_id         String?
+  status          import_status @default(UPLOADED)
+  list_id         String?
+  mapping         Json?
+  update_existing Boolean       @default(true)
+  total           Int           @default(0)
+  created         Int           @default(0)
+  updated         Int           @default(0)
+  skipped         Int           @default(0)
+  errors          Json          @default("[]")
+  created_by      String?
+  created_at      DateTime
+  finished_at     DateTime?
+
+  @@index([tenant_id, created_at])
+}
+
+// ─── Templates and campaigns ─────────────────────────────────────────────────
+
+model templates {
+  id         String   @id
+  tenant_id  String
+  name       String
+  subject    String
+  preheader  String   @default("")
+  html       String
+  text_body  String?
+  is_starter Boolean  @default(false)
+  created_at DateTime
+  updated_at DateTime
+
+  @@index([tenant_id])
+}
+
+model campaigns {
+  id                 String          @id
+  tenant_id          String
+  name               String
+  status             campaign_status @default(DRAFT)
+  subject            String
+  preheader          String          @default("")
+  html               String          @default("")
+  template_id        String?
+  sender_identity_id String?
+  audience           Json
+  scheduled_at       DateTime?
+  started_at         DateTime?
+  completed_at       DateTime?
+  paused_reason      String?
+  created_by         String?
+  created_at         DateTime
+  updated_at         DateTime
+
+  @@index([tenant_id, status])
+  @@index([status, scheduled_at])
+}
+
+model campaign_recipients {
+  id          String           @id
+  tenant_id   String
+  campaign_id String
+  contact_id  String?
+  email       String
+  status      recipient_status @default(QUEUED)
+  message_id  String?
+  skip_reason String?
+  claimed_at  DateTime?
+  created_at  DateTime
+  updated_at  DateTime
+
+  @@unique([campaign_id, contact_id])
+  @@index([campaign_id, status])
+}
+
+model campaign_links {
+  id          String   @id
+  tenant_id   String
+  campaign_id String
+  url         String
+  token       String
+  created_at  DateTime
+
+  @@unique([campaign_id, url])
+  @@unique([campaign_id, token])
+}

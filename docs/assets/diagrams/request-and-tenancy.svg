@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-labelledby="t d">
+  <title id="t">Tenants, entitlements and the public routes</title>
+  <desc id="d">The API has three kinds of routes: authenticated tenant routes where every query is scoped to the tenant, operator routes with a separate token, and public routes for tracking, unsubscribe, view-in-browser, subscribe forms and confirmation, which use signed tokens or slugs and no cookies. Plans set quotas and modules; reputation decides whether a tenant may send marketing mail.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#6B6560"/></marker>
+    <marker id="v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#AB1757"/></marker>
+    <style>
+      .bg{fill:#FFFFFF} .box{fill:#FAF8F6;stroke:#CFC8C2;stroke-width:1.2} .hot{fill:#FBF1F5;stroke:#E2A9BF;stroke-width:1.2}
+      .h{font:600 15px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#1C1917} .t{font:13px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#3A3531} .n{font:12px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#6B6560} .l{font:12px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#6B6560}
+      .ln{stroke:#6B6560;stroke-width:1.4;fill:none} .lv{stroke:#AB1757;stroke-width:2;fill:none}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="440" rx="18"/>
+  <text class="h" x="40" y="44" style="font-size:20px">Tenants, entitlements and the public routes</text>
+  <text class="n" x="40" y="66">Who can reach what.</text>
+  <rect class="box" x="40" y="100" width="330" height="150" rx="12"/>
+  <text class="h" x="56" y="128">Authenticated (JWT)</text>
+  <text class="t" x="56" y="150">/api/v1/*: tenant routes, every query</text>
+  <text class="t" x="56" y="168">filtered by tenant_id; another tenant's</text>
+  <text class="t" x="56" y="186">id is a 404. Modules (RBAC) and plan</text>
+  <text class="t" x="56" y="204">limits (entitlements) gate each area.</text>
+  <rect class="box" x="40" y="290" width="330" height="120" rx="12"/>
+  <text class="h" x="56" y="318">Operator (separate JWT)</text>
+  <text class="t" x="56" y="340">/api/v1/operator/*: tenants, plans,</text>
+  <text class="t" x="56" y="358">fleet, account health, DLQ, unpause,</text>
+  <text class="t" x="56" y="376">operator audit log.</text>
+  <rect class="box" x="450" y="100" width="330" height="150" rx="12"/>
+  <text class="h" x="466" y="128">Public, signed tokens</text>
+  <text class="t" x="466" y="150">/t/o/:token.gif  open pixel</text>
+  <text class="t" x="466" y="168">/t/c/:token  click redirect (allowlisted)</text>
+  <text class="t" x="466" y="186">/u/:token  unsubscribe (POST only)</text>
+  <text class="t" x="466" y="204">/w/:token  view in browser</text>
+  <rect class="box" x="450" y="290" width="330" height="120" rx="12"/>
+  <text class="h" x="466" y="318">Public, by slug</text>
+  <text class="t" x="466" y="340">/f/:slug  hosted subscribe form</text>
+  <text class="t" x="466" y="358">/c/:token  double opt-in confirmation</text>
+  <text class="t" x="466" y="376">rate limited, honeypot, no cookies</text>
+  <rect class="hot" x="860" y="100" width="300" height="150" rx="12"/>
+  <text class="h" x="876" y="128">Plans and entitlements</text>
+  <text class="t" x="876" y="150">a plan sets monthly emails, contacts,</text>
+  <text class="t" x="876" y="168">domains, users and the modules a</text>
+  <text class="t" x="876" y="186">tenant can open; the operator edits</text>
+  <text class="t" x="876" y="204">them, tenants see usage</text>
+  <rect class="box" x="860" y="290" width="300" height="120" rx="12"/>
+  <text class="h" x="876" y="318">Reputation</text>
+  <text class="t" x="876" y="340">rolling 14 days of bounces and</text>
+  <text class="t" x="876" y="358">complaints per tenant decides</text>
+  <text class="t" x="876" y="376">ACTIVE, WARNING, THROTTLED, PAUSED</text>
+
+</svg>

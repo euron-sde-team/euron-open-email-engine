@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="490" viewBox="0 0 1200 490" role="img" aria-labelledby="t d">
+  <title id="t">Euron Open Email Engine in context</title>
+  <desc id="d">Tenant staff use the tenant app, the operator uses the console, and recipients reach the public tracking, unsubscribe and form pages. All of them talk to one Express API with a BullMQ worker on PostgreSQL and Redis. The worker sends through Amazon SES with a per-tenant configuration set; SES publishes delivery, bounce and complaint events to SNS and SQS, which the worker consumes. Tenants publish DKIM, MAIL FROM, SPF, DMARC and tracking records in their own DNS.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#6B6560"/></marker>
+    <marker id="v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#AB1757"/></marker>
+    <style>
+      .bg{fill:#FFFFFF} .box{fill:#FAF8F6;stroke:#CFC8C2;stroke-width:1.2} .hot{fill:#FBF1F5;stroke:#E2A9BF;stroke-width:1.2}
+      .h{font:600 15px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#1C1917} .t{font:13px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#3A3531} .n{font:12px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#6B6560} .l{font:12px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#6B6560}
+      .ln{stroke:#6B6560;stroke-width:1.4;fill:none} .lv{stroke:#AB1757;stroke-width:2;fill:none}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="490" rx="18"/>
+  <text class="h" x="40" y="44" style="font-size:20px">Euron Open Email Engine in context</text>
+  <text class="n" x="40" y="66">Three audiences, one API, SES for delivery.</text>
+  <rect class="box" x="40" y="100" width="220" height="110" rx="12"/>
+  <text class="h" x="56" y="128">Tenant staff</text>
+  <text class="t" x="56" y="150">Browser: the tenant app</text>
+  <text class="t" x="56" y="168">domains, audience, campaigns</text>
+  <text class="t" x="56" y="186">reports, reputation</text>
+  <rect class="box" x="40" y="240" width="220" height="90" rx="12"/>
+  <text class="h" x="56" y="268">Platform operator</text>
+  <text class="t" x="56" y="290">Browser: the console</text>
+  <text class="t" x="56" y="308">plans, fleet, unpause</text>
+  <rect class="box" x="40" y="360" width="220" height="90" rx="12"/>
+  <text class="h" x="56" y="388">Recipients</text>
+  <text class="t" x="56" y="410">Mail clients, link clicks,</text>
+  <text class="t" x="56" y="428">unsubscribe, subscribe forms</text>
+  <rect class="hot" x="340" y="100" width="520" height="350" rx="12"/>
+  <text class="h" x="356" y="128">THE SYSTEM</text>
+  <rect class="box" x="370" y="150" width="220" height="80" rx="12"/>
+  <text class="h" x="386" y="178">Tenant app + console</text>
+  <text class="t" x="386" y="200">static React apps</text>
+  <text class="t" x="386" y="218">served by the web tier</text>
+  <rect class="box" x="620" y="150" width="210" height="80" rx="12"/>
+  <text class="h" x="636" y="178">API (Express)</text>
+  <text class="t" x="636" y="200">auth, audience, campaigns</text>
+  <text class="t" x="636" y="218">tracking, public pages</text>
+  <rect class="box" x="620" y="260" width="210" height="80" rx="12"/>
+  <text class="h" x="636" y="288">Worker (BullMQ)</text>
+  <text class="t" x="636" y="310">send batches, scheduler,</text>
+  <text class="t" x="636" y="328">imports, DNS checks, SES events</text>
+  <rect class="box" x="370" y="260" width="220" height="80" rx="12"/>
+  <text class="h" x="386" y="288">PostgreSQL</text>
+  <text class="t" x="386" y="310">tenants, contacts, campaigns,</text>
+  <text class="t" x="386" y="328">messages, events</text>
+  <rect class="box" x="370" y="360" width="220" height="70" rx="12"/>
+  <text class="h" x="386" y="388">Redis</text>
+  <text class="t" x="386" y="410">queues, rate limits</text>
+  <rect class="box" x="620" y="360" width="210" height="70" rx="12"/>
+  <text class="h" x="636" y="388">Files (S3)</text>
+  <text class="t" x="636" y="410">CSV imports</text>
+  <rect class="box" x="930" y="100" width="230" height="110" rx="12"/>
+  <text class="h" x="946" y="128">Amazon SES</text>
+  <text class="t" x="946" y="150">send with a per-tenant</text>
+  <text class="t" x="946" y="168">configuration set, DKIM,</text>
+  <text class="t" x="946" y="186">custom MAIL FROM</text>
+  <rect class="box" x="930" y="240" width="230" height="90" rx="12"/>
+  <text class="h" x="946" y="268">SNS and SQS</text>
+  <text class="t" x="946" y="290">delivery, bounce, complaint</text>
+  <text class="t" x="946" y="308">events (plus a DLQ)</text>
+  <rect class="box" x="930" y="360" width="230" height="90" rx="12"/>
+  <text class="h" x="946" y="388">DNS (tenant's)</text>
+  <text class="t" x="946" y="410">DKIM, MAIL FROM, SPF,</text>
+  <text class="t" x="946" y="428">DMARC, tracking CNAME</text>
+  <path class="ln" d="M260 155 H340" marker-end="url(#a)"/>
+  <path class="ln" d="M260 285 H340" marker-end="url(#a)"/>
+  <path class="lv" d="M260 405 H340" marker-end="url(#v)"/>
+  <path class="lv" d="M830 190 H930" marker-end="url(#v)"/>
+  <text class="l" x="860" y="182">SendEmail</text>
+  <path class="ln" d="M1045 210 V240" marker-end="url(#a)"/>
+  <path class="ln" d="M930 290 H830" marker-end="url(#a)"/>
+  <text class="l" x="860" y="282">events</text>
+  <path class="ln" d="M1045 330 V360" marker-end="url(#a)"/>
+
+</svg>

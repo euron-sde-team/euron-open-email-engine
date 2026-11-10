@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-labelledby="t d">
+  <title id="t">AWS deployment</title>
+  <desc id="d">Browsers reach CloudFront and WAF (optional in dev) and then one load balancer that sends public and API paths to the api service. Web, api, worker and a one-off migrate task run on ECS Fargate in private subnets and use RDS PostgreSQL, ElastiCache Redis, an S3 files bucket, KMS and Secrets Manager. The worker sends through SES and consumes events from SNS and SQS with a dead-letter queue and CloudWatch alarms. Tenants publish their DNS records at their own DNS host.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#6B6560"/></marker>
+    <marker id="v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#AB1757"/></marker>
+    <style>
+      .bg{fill:#FFFFFF} .box{fill:#FAF8F6;stroke:#CFC8C2;stroke-width:1.2} .hot{fill:#FBF1F5;stroke:#E2A9BF;stroke-width:1.2}
+      .h{font:600 15px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#1C1917} .t{font:13px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#3A3531} .n{font:12px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#6B6560} .l{font:12px Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#6B6560}
+      .ln{stroke:#6B6560;stroke-width:1.4;fill:none} .lv{stroke:#AB1757;stroke-width:2;fill:none}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="440" rx="18"/>
+  <text class="h" x="40" y="44" style="font-size:20px">AWS deployment</text>
+  <text class="n" x="40" y="66">Terraform in infra/terraform: one module per concern, environments in infra/terraform/envs.</text>
+  <rect class="box" x="40" y="100" width="200" height="90" rx="12"/>
+  <text class="h" x="56" y="128">Browsers</text>
+  <text class="t" x="56" y="150">staff, operator, recipients</text>
+  <text class="t" x="56" y="168">(links, pixel, forms)</text>
+  <rect class="box" x="300" y="100" width="220" height="90" rx="12"/>
+  <text class="h" x="316" y="128">CloudFront + WAF</text>
+  <text class="t" x="316" y="150">optional in dev; rules let</text>
+  <text class="t" x="316" y="168">the pixel and redirects through</text>
+  <rect class="box" x="580" y="100" width="200" height="90" rx="12"/>
+  <text class="h" x="596" y="128">Load balancer</text>
+  <text class="t" x="596" y="150">HTTPS, one host</text>
+  <text class="t" x="596" y="168">/t /u /f /c /w and /api to api</text>
+  <rect class="hot" x="40" y="260" width="420" height="150" rx="12"/>
+  <text class="h" x="56" y="288">Private subnets, ECS Fargate</text>
+  <text class="t" x="56" y="310">web (tenant app + console static)</text>
+  <text class="t" x="56" y="328">api (REST + public routes)</text>
+  <text class="t" x="56" y="346">worker (BullMQ: sends, scheduler, imports, SES events)</text>
+  <text class="t" x="56" y="364">migrate (one-off task)</text>
+  <rect class="box" x="520" y="260" width="200" height="150" rx="12"/>
+  <text class="h" x="536" y="288">Data</text>
+  <text class="t" x="536" y="310">RDS PostgreSQL</text>
+  <text class="t" x="536" y="328">ElastiCache Redis</text>
+  <text class="t" x="536" y="346">S3 files bucket</text>
+  <text class="t" x="536" y="364">KMS, Secrets Manager</text>
+  <rect class="box" x="770" y="260" width="200" height="150" rx="12"/>
+  <text class="h" x="786" y="288">SES + events</text>
+  <text class="t" x="786" y="310">identities, config sets</text>
+  <text class="t" x="786" y="328">SNS topic</text>
+  <text class="t" x="786" y="346">SQS queue + DLQ</text>
+  <text class="t" x="786" y="364">CloudWatch alarms</text>
+  <rect class="box" x="850" y="100" width="230" height="90" rx="12"/>
+  <text class="h" x="866" y="128">Tenant DNS</text>
+  <text class="t" x="866" y="150">DKIM, MAIL FROM, SPF,</text>
+  <text class="t" x="866" y="168">DMARC, tracking CNAME</text>
+  <path class="ln" d="M240 145 H300" marker-end="url(#a)"/>
+  <path class="ln" d="M520 145 H580" marker-end="url(#a)"/>
+  <path class="ln" d="M680 190 V225 H250 V260" marker-end="url(#a)"/>
+  <path class="ln" d="M460 335 H520" marker-end="url(#a)"/>
+  <path class="lv" d="M460 375 H770" marker-end="url(#v)"/>
+
+</svg>

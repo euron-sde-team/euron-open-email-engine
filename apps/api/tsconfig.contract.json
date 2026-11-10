@@ -1,0 +1,8 @@
+{
+  // Compile-time check that the DTO mappers return what @open-email/types declares.
+  // Not part of the build or the Docker image; `pnpm typecheck` runs it.
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "noEmit": true, "rootDir": "../.." },
+  "include": ["contract/**/*", "src/**/*", "../../packages/types/src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

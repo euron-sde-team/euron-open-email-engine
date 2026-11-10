@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="t d">
+  <title id="t">Euron Open Email Engine</title>
+  <desc id="d">Euron Open Email Engine: a self-hosted, multi-tenant email engine on Amazon SES. Tenants bring their own sending domains, verify them with DNS, build audiences, templates and campaigns, schedule them and track delivery, opens, clicks and reputation.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17101A"/>
+      <stop offset="1" stop-color="#1F1118"/>
+    </linearGradient>
+    <clipPath id="r"><rect width="1280" height="360" rx="24"/></clipPath>
+  </defs>
+  <g clip-path="url(#r)">
+    <rect width="1280" height="360" fill="url(#bg)"/>
+    <g fill="none" stroke="#F075AA" stroke-opacity="0.16" stroke-width="1.2">
+      <circle cx="1070" cy="180" r="90"/><circle cx="1070" cy="180" r="150"/><circle cx="1070" cy="180" r="210"/><circle cx="1070" cy="180" r="270"/>
+    </g>
+    <g transform="translate(72 70)">
+      <rect width="56" height="56" rx="16" fill="#F8F2F4"/>
+      <rect x="12" y="17" width="32" height="22" rx="4" fill="#17101A"/>
+      <path d="M13 19l15 11 15-11" fill="none" stroke="#F075AA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="72" y="190" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="56" font-weight="700" letter-spacing="-1.4" fill="#F8F2F4">Euron Open Email Engine</text>
+    <text x="74" y="236" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" fill="#CDBFC6">A self-hosted, multi-tenant alternative to Mailchimp or SendGrid</text>
+    <text x="74" y="266" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" fill="#CDBFC6">for campaigns. Bring your own domains, send on Amazon SES.</text>
+    <text x="74" y="312" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" letter-spacing="1.6" fill="#F075AA">OPEN SOURCE · SELF-HOSTED · RUNS WITH NO AWS ACCOUNT</text>
+    <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+      <g transform="translate(860 64)"><rect width="330" height="64" rx="14" fill="#2B1D25"/><text x="20" y="28" font-size="17" font-weight="600" fill="#F8F2F4">mail.northwind.example</text><text x="20" y="49" font-size="14" fill="#B7A6AF">DKIM · MAIL FROM · SPF · DMARC verified</text></g>
+      <g transform="translate(860 148)"><rect width="330" height="64" rx="14" fill="#2B1D25"/><text x="20" y="28" font-size="17" font-weight="600" fill="#F8F2F4">Summer sale</text><text x="20" y="49" font-size="14" fill="#B7A6AF">460 sent · 99% delivered · 44% opened · 4.4% clicked</text></g>
+      <g transform="translate(860 232)"><rect width="330" height="64" rx="14" fill="#F075AA"/><text x="20" y="28" font-size="17" font-weight="600" fill="#17101A">Reputation: active</text><text x="20" y="49" font-size="14" fill="#3A1226">bounces 1.9% · complaints 0.0% · 14 days</text></g>
+    </g>
+  </g>
+</svg>

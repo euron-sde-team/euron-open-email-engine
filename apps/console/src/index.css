@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Graphite DARK palette (default): cool near-black canvas -> card ->
+       popover with hairline borders. The console accent is a slate teal,
+       distinct from the tenant app's magenta/amber, so an operator never
+       mistakes one product surface for the other. */
+    --background: 205 10% 4%;
+    --foreground: 200 10% 95%;
+
+    --card: 205 9% 7%;
+    --card-foreground: 200 10% 95%;
+
+    --popover: 205 9% 9%;
+    --popover-foreground: 200 10% 95%;
+
+    --secondary: 205 9% 9%;
+    --secondary-foreground: 200 10% 95%;
+
+    --muted: 205 9% 10%;
+    --muted-foreground: 205 8% 66%;
+
+    --accent: 205 9% 14%;
+    --accent-foreground: 200 10% 95%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 205 8% 16%;
+    --input: 205 8% 24%;
+
+    --radius: 6px;
+
+    /* Slate teal (RGB triplets so utilities can apply /alpha). Contrast:
+       dark #6FC4C4 on the canvas 9.8:1, on cards 9.3:1, ink #061012 on the
+       fill 9.5:1; light #0F626E on white 7.0:1, white on the fill 7.0:1. */
+    --brand: 111 196 196; /* #6FC4C4 */
+    --brand-foreground: 6 16 18; /* #061012 */
+
+    /* Semantic scale (RGB triplets). Each is >= 4.5:1 on canvas, card and muted. */
+    --success: 74 222 128; /* #4ADE80 */
+    --warning: 251 191 36; /* #FBBF24 */
+    --caution: 251 146 60; /* #FB923C */
+    --info: 148 163 184; /* #94A3B8 slate */
+
+    /* Flat surfaces: no small elevation. Floating overlays keep a faint lift. */
+    --shadow-sm: 0 0 #0000;
+    --shadow-md: 0 4px 16px -4px rgb(0 0 0 / 0.5);
+    --shadow-lg: 0 12px 32px -12px rgb(0 0 0 / 0.6);
+
+    /* Motion tokens. */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Light mode (toggle in the top bar). */
+  .light {
+    --background: 200 14% 98%;
+    --foreground: 205 20% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 205 20% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 205 20% 10%;
+
+    --secondary: 200 14% 95%;
+    --secondary-foreground: 205 20% 10%;
+
+    --muted: 200 14% 95%;
+    --muted-foreground: 205 9% 38%;
+
+    --accent: 200 14% 92%;
+    --accent-foreground: 205 20% 10%;
+
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 12% 88%;
+    --input: 200 10% 72%;
+
+    --brand: 15 98 110; /* #0F626E */
+    --brand-foreground: 255 255 255;
+
+    /* Darker semantics so small text keeps 4.5:1 on white and on muted. */
+    --success: 22 101 52; /* #166534 */
+    --warning: 133 77 14; /* #854D0E */
+    --caution: 176 58 10; /* #B03A0A */
+    --info: 71 85 105; /* #475569 */
+
+    --shadow-sm: 0 0 #0000;
+    --shadow-md: 0 4px 12px -4px rgb(16 24 40 / 0.08);
+    --shadow-lg: 0 12px 32px -12px rgb(16 24 40 / 0.12);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-[14px];
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv01", "cv03", "ss01";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  /* Numbers and identifiers read better tabular. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background-color: rgb(var(--brand) / 0.3);
+  }
+}
+
+@layer utilities {
+  /* Staggered fade-up reveal on page load. Apply .reveal per section and
+     stagger with inline animation-delay (e.g. style={{ animationDelay: "60ms" }}). */
+  .reveal {
+    animation: fade-up 0.4s var(--ease-out) both;
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Shimmer sweep for loading skeletons. */
+  .shimmer {
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted)) 25%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 75%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.2s var(--ease-standard) infinite;
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Flat hover for interactive cards: the hairline darkens, nothing lifts. */
+  .lift {
+    transition: border-color 0.15s var(--ease-standard);
+  }
+  .lift:hover {
+    border-color: hsl(var(--muted-foreground) / 0.4);
+  }
+
+  /* Modals/dialogs: opacity-only fade, perfectly centered (no slide or zoom).
+     Custom keyframes touch opacity ONLY so the centering transform is never
+     disturbed; Radix waits on these animations to unmount on close. */
+  .dialog-overlay[data-state="open"],
+  .dialog-content[data-state="open"] {
+    animation: dialog-fade-in 0.16s var(--ease-standard) both;
+  }
+  .dialog-overlay[data-state="closed"],
+  .dialog-content[data-state="closed"] {
+    animation: dialog-fade-out 0.12s var(--ease-standard) both;
+  }
+
+  @keyframes dialog-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dialog-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .shimmer,
+    .lift,
+    .dialog-overlay,
+    .dialog-content {
+      animation: none;
+      transition: none;
+    }
+  }
+
+  /* Dot-grid texture for the sign-in brand panel. */
+  .dot-grid {
+    background-image: radial-gradient(circle, rgb(255 255 255 / 0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+}
+
+/* Quiet scrollbars. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground) / 0.4);
+}

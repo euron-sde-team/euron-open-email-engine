@@ -1,0 +1,12 @@
+{
+  "name": "@open-email/types",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The shared API contract: DTOs for the tenant app, the operator console and the API.",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}
