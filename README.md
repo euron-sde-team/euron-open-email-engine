@@ -243,8 +243,6 @@ Details: [HLD](docs/architecture/HLD.md), [LLD](docs/architecture/LLD.md),
 | Campaigns, templates and segments | Yes | Yes | Yes | No |
 | Bring-your-own sending domains per customer | Yes | Limited | Yes | Yes |
 | Multi-tenant with plans and quotas | Yes | No | Subusers | No |
-| Developer send API, SMTP relay, webhooks | Not in 0.1 | Yes | Yes | Yes |
-| Automations and A/B tests | Not in 0.1 | Yes | Yes | No |
 
 A fair, longer comparison, including Postmark, Mailgun, Brevo, Listmonk and Mautic, is in
 [docs/architecture/comparison.md](docs/architecture/comparison.md). Product names belong to their
