@@ -425,14 +425,6 @@ email landing in Mailpit. Real sending needs SES in production mode and a domain
 </details>
 
 <details>
-<summary><b>Is this a Mailchimp or SendGrid replacement?</b></summary>
-
-For campaigns, to a large degree: audiences, segments, templates, scheduling and reports. It is not
-yet a replacement for SendGrid's developer API, SMTP relay or webhooks, or for Mailchimp's
-automations and A/B tests. They are on the roadmap, and the comparison page is specific about it.
-</details>
-
-<details>
 <summary><b>Why can opens look high?</b></summary>
 
 Apple Mail Privacy Protection and some security scanners load images automatically. Those opens are
